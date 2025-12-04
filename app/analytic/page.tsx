@@ -2,6 +2,7 @@
 import { useEffect } from "react";
 import Sidebar from "@/components/sidebar";
 import Navbar from "@/components/navbar";
+import Footer from "@/components/footer";
 import Image from "next/image";
 import { MoveDown, MoveUp } from "lucide-react";
 import {
@@ -13,6 +14,13 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+
+declare global {
+  interface Window {
+    googleChartsLoaded?: boolean;
+    google?: any;
+  }
+}
 
 export default function Analytic() {
   const barchart = [
@@ -178,50 +186,50 @@ export default function Analytic() {
     },
   ];
   useEffect(() => {
-    // Load Google Charts script
-    const script = document.createElement("script");
-    script.src = "https://www.gstatic.com/charts/loader.js";
-    script.onload = () => {
-      window.google.charts.load("current", { packages: ["corechart"] });
-      window.google.charts.setOnLoadCallback(drawChart);
-    };
-    document.body.appendChild(script);
+    
+    // Prevent loading script multiple times
+    if (!window.googleChartsLoaded) {
+      window.googleChartsLoaded = true;
 
-    function drawChart() {
+      const script = document.createElement("script");
+      script.src = "https://www.gstatic.com/charts/loader.js";
+      script.onload = initCharts;
+      document.body.appendChild(script);
+    } else {
+      initCharts();
+    }
+
+    function initCharts() {
+      window.google.charts.load("current", {
+        packages: ["corechart", "geochart"],
+      });
+
+      window.google.charts.setOnLoadCallback(() => {
+        drawDonutChart();
+        drawRegionsMap();
+      });
+    }
+
+    function drawDonutChart() {
       const data = window.google.visualization.arrayToDataTable([
-        [" Task", "Hours per Day"],
-        [" Desktops", 3561],
-        [" Tablets", 1443],
-        [" Mobiles", 2462],
+        ["Device", "Count"],
+        ["Desktops", 3561],
+        ["Tablets", 1443],
+        ["Mobiles", 2462],
       ]);
 
       const options = {
         height: 450,
+        pieHole: 0.9,
         title: "Session device",
-        pieHole: 0.9, // donut effect
         colors: ["#FFC107", "#3E82F7", "#04D182"],
         legend: { position: "bottom" },
       };
 
-      const chart = new window.google.visualization.PieChart(
+      new window.google.visualization.PieChart(
         document.getElementById("donutchart")
-      );
-
-      chart.draw(data, options);
+      ).draw(data, options);
     }
-  }, []);
-
-  useEffect(() => {
-    const script = document.createElement("script");
-    script.src = "https://www.gstatic.com/charts/loader.js";
-    script.onload = () => {
-      window.google.charts.load("current", {
-        packages: ["geochart"],
-      });
-
-      window.google.charts.setOnLoadCallback(drawRegionsMap);
-    };
-    document.body.appendChild(script);
 
     function drawRegionsMap() {
       const data = window.google.visualization.arrayToDataTable([
@@ -234,19 +242,17 @@ export default function Analytic() {
         ["China", 9.85],
       ]);
 
-      var options = {
-        legend: "None",
+      const options = {
+        legend: "none",
         colorAxis: {
-          values: [5.11, 7.68, 9.85, 12.42, 16.79, 37.61], // Map these specific values
-          colors: ["purple", "pink", "orange", "yellow", "green", "blue"], // To these specific colors
+          values: [5.11, 7.68, 9.85, 12.42, 16.79, 37.61],
+          colors: ["purple", "pink", "orange", "yellow", "green", "blue"],
         },
       };
 
-      const chart = new window.google.visualization.GeoChart(
+      new window.google.visualization.GeoChart(
         document.getElementById("regions_div")
-      );
-
-      chart.draw(data, options);
+      ).draw(data, options);
     }
   }, []);
 
@@ -608,22 +614,19 @@ export default function Analytic() {
         <div>
           <div className="bg-white mt-6 rounded-2xl p-8">
             <BarChart
+              className="p-2 w-[1150px] h-[300px]"
               style={{
                 aspectRatio: 1.618,
-                height: 400,
-                width:1200,
-                maxWidth: 1400
               }}
               responsive
               data={barchart}
               margin={{
                 top: 5,
-                right: 0,
+                right: 5,
                 left: 0,
-                bottom: 5,
               }}
               barGap={5}
-              barCategoryGap={"100%"}
+              barCategoryGap={"80%"}
             >
               <XAxis dataKey="name" />
               <Tooltip />
@@ -631,6 +634,9 @@ export default function Analytic() {
               <Bar dataKey="uv" fill="#04D182" barSize={20} />
             </BarChart>
           </div>
+        </div>
+        <div>
+          <Footer />
         </div>
       </main>
     </div>

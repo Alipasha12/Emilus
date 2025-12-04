@@ -35,8 +35,8 @@ export default function Sidebar() {
           <ul className="*:flex *:hover:text-blue-500 *:gap-2 *:text-gray-500 text-[14px] font-semibold *:pb-6 pt-5">
             <li>
               <Link href={"/"} className="flex gap-2">
-              <Gauge size={18} />
-              Default
+                <Gauge size={18} />
+                Default
               </Link>
             </li>
             <li>
@@ -46,8 +46,10 @@ export default function Sidebar() {
               </Link>
             </li>
             <li>
-              <ChartLine size={18} />
-              Sales
+              <Link href="/sales" className="flex gap-2">
+                <ChartLine size={18} />
+                Sales
+              </Link>
             </li>
           </ul>
           <span className="text-[13px] text-gray-400 pt-8 font-semibold">

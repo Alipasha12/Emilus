@@ -6,6 +6,7 @@ import "react-circular-progressbar/dist/styles.css";
 import Image from "next/image";
 import Navbar from "@/components/navbar";
 import Sidebar from "@/components/sidebar";
+import Footer from "@/components/footer";
 import { Ellipsis, MoveDown, MoveUp, User } from "lucide-react";
 
 export default function Hero() {
@@ -389,16 +390,8 @@ export default function Hero() {
             </table>
           </div>
         </div>
-        <div className="flex justify-between bg-white p-2 rounded-xl">
-          <h1>
-            Copyright ©2025 <a>Emilus</a> All rights reserved.
-          </h1>
-          <div className="flex gap-6">
-            <span>Terms & Conditions </span>
-            <span className="border-l-2 pl-5 border-gray-300">
-              Privacy & Policy
-            </span>
-          </div>
+        <div>
+          <Footer/>
         </div>
       </main>
     </div>
