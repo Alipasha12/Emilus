@@ -14,6 +14,14 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { PieChart, Pie, Cell, Legend, ResponsiveContainer } from "recharts";
+const data = [
+  { name: "Desktops", value: 3561 },
+  { name: "Tablets", value: 1443 },
+  { name: "Mobiles", value: 2462 }
+];
+
+const COLORS = ["#3b82f6", "#22c55e", "#facc15", "#f97316"];
 
 declare global {
   interface Window {
@@ -23,6 +31,8 @@ declare global {
 }
 
 export default function Analytic() {
+  const total = data.reduce((sum, item) => sum + item.value, 0);
+
   const barchart = [
     {
       name: "1 Dec",
@@ -60,7 +70,6 @@ export default function Analytic() {
       pv: 43,
     },
   ];
-
   const facebook = [
     {
       fb: 12,
@@ -186,7 +195,6 @@ export default function Analytic() {
     },
   ];
   useEffect(() => {
-    
     // Prevent loading script multiple times
     if (!window.googleChartsLoaded) {
       window.googleChartsLoaded = true;
@@ -205,32 +213,9 @@ export default function Analytic() {
       });
 
       window.google.charts.setOnLoadCallback(() => {
-        drawDonutChart();
         drawRegionsMap();
       });
     }
-
-    function drawDonutChart() {
-      const data = window.google.visualization.arrayToDataTable([
-        ["Device", "Count"],
-        ["Desktops", 3561],
-        ["Tablets", 1443],
-        ["Mobiles", 2462],
-      ]);
-
-      const options = {
-        height: 450,
-        pieHole: 0.9,
-        title: "Session device",
-        colors: ["#FFC107", "#3E82F7", "#04D182"],
-        legend: { position: "bottom" },
-      };
-
-      new window.google.visualization.PieChart(
-        document.getElementById("donutchart")
-      ).draw(data, options);
-    }
-
     function drawRegionsMap() {
       const data = window.google.visualization.arrayToDataTable([
         ["Country", "percentage"],
@@ -307,11 +292,66 @@ export default function Analytic() {
             style={{ height: "450px" }}
           ></div>
         </div>
-        <div
-          className="py-4 w-full h-screen"
-          id="donutchart"
-          style={{ height: "450px" }}
-        ></div>
+        <div className="mt-6 rounded-2xl bg-white">
+          <ResponsiveContainer className="mb-10" width="100%" height={390}>
+            <PieChart>
+              <Pie
+                data={data}
+                innerRadius={100}
+                outerRadius={110}
+                paddingAngle={2}
+                dataKey="value"
+              >
+                {data.map((_, index) => (
+                  <Cell key={index} fill={COLORS[index]} />
+                ))}
+              </Pie>
+
+              {/* Center Text */}
+              <text
+                x="50%"
+                y="38%"
+                textAnchor="middle"
+                dominantBaseline="middle"
+                style={{ fontSize: 18, fontWeight: "600", fill: "#0f172a" }}
+              >
+                Sessions Device
+              </text>
+              <text
+                x="50%"
+                y="45%"
+                textAnchor="middle"
+                dominantBaseline="middle"
+                style={{ fontSize: 16, fill: "#0f172a" }}
+              >
+                {total}
+              </text>
+
+              <Legend
+                verticalAlign="bottom"
+                iconType="circle"
+                iconSize={6}
+                layout="vertical"
+                formatter={(value, entry) => (
+                  <span style={{ color: "black" }}>
+                    {value}
+                    <span
+                      style={{
+                        marginLeft: 12,
+                        fontWeight: 600,
+                        justifyContent: "space-between",
+                        width: 180,
+                        color: "black",
+                      }}
+                    >
+                      {entry?.payload?.value}
+                    </span>
+                  </span>
+                )}
+              />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
         <div className=" flex gap-6 pt-8">
           <div className="pt-6 px-8 w-[50%] rounded-2xl bg-white">
             <h1 className="text-[18px] font-bold">Most visited pages</h1>
