@@ -320,142 +320,157 @@ export default function Sales() {
         </div>
         <div className="bg-white mt-8 pt-8 rounded-2xl px-8 gap-6 pb-8">
           <h1>Recent Order</h1>
-          <table className="w-full">
+          <table className="w-full border-collapse">
             <thead className="bg-gray-200">
-              <tr className="*:p-3 text-center">
-                <th className="rounded-l">ID</th>
-                <th className="flex justify-start mx-10">Product</th>
-                <th>Date</th>
-                <th>Order Status</th>
-                <th>Payment Status</th>
-                <th className="rounded-r">Total</th>
+              <tr className="text-center">
+                <th className="p-3 rounded-l">ID</th>
+                <th className="p-3 text-left">Product</th>
+                <th className="p-3">Date</th>
+                <th className="p-3">Order Status</th>
+                <th className="p-3">Payment Status</th>
+                <th className="p-3 rounded-r">Total</th>
               </tr>
             </thead>
+
             <tbody>
-              <tr className="text-center *:py-4 border-b border-gray-300">
-                <td className="text-gray-500 text-[14px]">#5331</td>
-                <td className="flex text-[15px] items-center justify-start mx-10 gap-2">
-                  <Image
-                    className="rounded-2xl"
-                    width={30}
-                    height={30}
-                    alt="sheet image"
-                    src={"/eileen.jpg"}
-                  />
-                  Eileen Horton
+              <tr className="border-b border-gray-300 text-center">
+                <td className="py-4 text-gray-500 text-sm">#5331</td>
+                <td className="py-4 text-left">
+                  <div className="flex items-center gap-2 ml-10 text-[15px]">
+                    <Image
+                      src="/eileen.jpg"
+                      alt="Eileen Horton"
+                      width={30}
+                      height={30}
+                      className="rounded-2xl"
+                    />
+                    Eileen Horton
+                  </div>
                 </td>
-                <td className="text-gray-500 text-[14px]">11-11-2019</td>
-                <td className="text-indigo-500 text-[13px]">
-                  <button className="border p-1 rounded bg-indigo-50">
+                <td className="py-4 text-gray-500 text-sm">11-11-2019</td>
+                <td className="py-4 text-[13px] text-indigo-500">
+                  <span className="border px-2 py-1 rounded bg-indigo-50">
                     Ready
-                  </button>
+                  </span>
                 </td>
-                <td className="text-gray-500 text-[14px]">
+                <td className="py-4 text-gray-500 text-sm">
                   <ul className="list-disc list-inside marker:text-green-500">
                     <li>Paid</li>
                   </ul>
                 </td>
-                <td className="text-gray-500 text-[14px]">$677.00</td>
+                <td className="py-4 text-gray-500 text-sm">$677.00</td>
               </tr>
-              <tr className="text-center *:py-4 border-b border-gray-300">
-                <td className="text-gray-500 text-[14px]">#5328</td>
-                <td className="flex text-[15px] items-center justify-start mx-10 gap-2">
-                  <Image
-                    className="rounded-2xl"
-                    width={30}
-                    height={30}
-                    alt="sheet image"
-                    src={"/terrance.jpg"}
-                  />
-                  Terrance Moreno
+
+              <tr className="border-b border-gray-300 text-center">
+                <td className="py-4 text-gray-500 text-sm">#5328</td>
+                <td className="py-4 text-left">
+                  <div className="flex items-center gap-2 ml-10 text-[15px]">
+                    <Image
+                      src="/terrance.jpg"
+                      alt="Terrance Moreno"
+                      width={30}
+                      height={30}
+                      className="rounded-2xl"
+                    />
+                    Terrance Moreno
+                  </div>
                 </td>
-                <td className="text-gray-500 text-[14px]">20-10-2019</td>
-                <td className="text-indigo-500 text-[13px]">
-                  <button className="border p-1 rounded bg-indigo-50">
+                <td className="py-4 text-gray-500 text-sm">20-10-2019</td>
+                <td className="py-4 text-[13px] text-indigo-500">
+                  <span className="border px-2 py-1 rounded bg-indigo-50">
                     Ready
-                  </button>
+                  </span>
                 </td>
-                <td className="text-gray-500 text-[14px]">
+                <td className="py-4 text-gray-500 text-sm">
                   <ul className="list-disc list-inside marker:text-green-500">
                     <li>Paid</li>
                   </ul>
                 </td>
-                <td className="text-gray-500 text-[14px]">$1328.35</td>
+                <td className="py-4 text-gray-500 text-sm">$1328.35</td>
               </tr>
-              <tr className="text-center *:py-4 border-b border-gray-300">
-                <td className="text-gray-500 text-[14px]">#5321</td>
-                <td className="flex text-[15px] items-center justify-start mx-10 gap-2">
-                  <Image
-                    className="rounded-2xl"
-                    width={30}
-                    height={30}
-                    alt="sheet image"
-                    src={"/ron.jpg"}
-                  />
-                  Ron Vargas
+
+              <tr className="border-b border-gray-300 text-center">
+                <td className="py-4 text-gray-500 text-sm">#5321</td>
+                <td className="py-4 text-left">
+                  <div className="flex items-center gap-2 ml-10 text-[15px]">
+                    <Image
+                      src="/ron.jpg"
+                      alt="Ron Vargas"
+                      width={30}
+                      height={30}
+                      className="rounded-2xl"
+                    />
+                    Ron Vargas
+                  </div>
                 </td>
-                <td className="text-gray-500 text-[14px]">05-07-2020</td>
-                <td className="text-[#2C979C] text-[13px]">
-                  <button className="border p-1 rounded bg-[#E6FFFB]">
+                <td className="py-4 text-gray-500 text-sm">05-07-2020</td>
+                <td className="py-4 text-[13px] text-teal-600">
+                  <span className="border px-2 py-1 rounded bg-teal-50">
                     Shipped
-                  </button>
+                  </span>
                 </td>
-                <td className="text-gray-500 text-[14px]">
+                <td className="py-4 text-gray-500 text-sm">
                   <ul className="list-disc list-inside marker:text-green-500">
                     <li>Paid</li>
                   </ul>
                 </td>
-                <td className="text-gray-500 text-[14px]">$629.00</td>
+                <td className="py-4 text-gray-500 text-sm">$629.00</td>
               </tr>
-              <tr className="text-center *:py-4 border-b border-gray-300">
-                <td className="text-gray-500 text-[14px]">#5287</td>
-                <td className="flex text-[15px] items-center justify-start mx-10 gap-2">
-                  <Image
-                    className="rounded-2xl"
-                    width={30}
-                    height={30}
-                    alt="sheet image"
-                    src={"/luke.jpg"}
-                  />
-                  Luke Cook
+
+              <tr className="border-b border-gray-300 text-center">
+                <td className="py-4 text-gray-500 text-sm">#5287</td>
+                <td className="py-4 text-left">
+                  <div className="flex items-center gap-2 ml-10 text-[15px]">
+                    <Image
+                      src="/luke.jpg"
+                      alt="Luke Cook"
+                      width={30}
+                      height={30}
+                      className="rounded-2xl"
+                    />
+                    Luke Cook
+                  </div>
                 </td>
-                <td className="text-gray-500 text-[14px]">16-01-2019</td>
-                <td className="text-[#2C979C] text-[13px]">
-                  <button className="border p-1 rounded bg-[#E6FFFB]">
+                <td className="py-4 text-gray-500 text-sm">16-01-2019</td>
+                <td className="py-4 text-[13px] text-teal-600">
+                  <span className="border px-2 py-1 rounded bg-teal-50">
                     Shipped
-                  </button>
+                  </span>
                 </td>
-                <td className="text-gray-500 text-[14px]">
+                <td className="py-4 text-gray-500 text-sm">
                   <ul className="list-disc list-inside marker:text-green-500">
                     <li>Paid</li>
                   </ul>
                 </td>
-                <td className="text-gray-500 text-[14px]">$25.90</td>
+                <td className="py-4 text-gray-500 text-sm">$25.90</td>
               </tr>
-              <tr className="text-center *:py-4 border-b border-gray-300">
-                <td className="text-gray-500 text-[14px]">#5351</td>
-                <td className="flex text-[15px] items-center justify-start mx-10 gap-2">
-                  <Image
-                    className="rounded-2xl"
-                    width={30}
-                    height={30}
-                    alt="sheet image"
-                    src={"/joyce.jpg"}
-                  />
-                  Joyce Freeman
+
+              <tr className="border-b border-gray-300 text-center">
+                <td className="py-4 text-gray-500 text-sm">#5351</td>
+                <td className="py-4 text-left">
+                  <div className="flex items-center gap-2 ml-10 text-[15px]">
+                    <Image
+                      src="/joyce.jpg"
+                      alt="Joyce Freeman"
+                      width={30}
+                      height={30}
+                      className="rounded-2xl"
+                    />
+                    Joyce Freeman
+                  </div>
                 </td>
-                <td className="text-gray-500 text-[14px]">04-06-2020</td>
-                <td className="text-indigo-500 text-[13px]">
-                  <button className="border p-1 rounded bg-indigo-50">
+                <td className="py-4 text-gray-500 text-sm">04-06-2020</td>
+                <td className="py-4 text-[13px] text-indigo-500">
+                  <span className="border px-2 py-1 rounded bg-indigo-50">
                     Ready
-                  </button>
+                  </span>
                 </td>
-                <td className="text-gray-500 text-[14px]">
+                <td className="py-4 text-gray-500 text-sm">
                   <ul className="list-disc list-inside marker:text-yellow-500">
                     <li>Pending</li>
                   </ul>
                 </td>
-                <td className="text-gray-500 text-[14px]">$817.50</td>
+                <td className="py-4 text-gray-500 text-sm">$817.50</td>
               </tr>
             </tbody>
           </table>

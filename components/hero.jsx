@@ -231,7 +231,7 @@ export default function Hero() {
                 style={{
                   width: "8",
                   height: "8",
-                  stroke: "green"
+                  stroke: "green",
                 }}
                 responsive
                 data={data}
@@ -239,7 +239,7 @@ export default function Hero() {
                   top: 5,
                   right: 20,
                   left: 20,
-                  bottom: 5
+                  bottom: 5,
                 }}
               >
                 <Line type="monotone" dataKey="pv" />
@@ -303,97 +303,110 @@ export default function Hero() {
               <h1 className="text-[20px] font-bold ">Latest Transactions </h1>
               <Ellipsis />
             </div>
-            <table className="flex flex-col w-full px-8">
+            <table className="w-full px-8">
               <thead>
-                <tr className="flex justify-between pb-4 border-gray-100">
-                  <th>Customer</th>
-                  <th>date</th>
-                  <th>Amount</th>
-                  <th>Status</th>
+                <tr className="border-b border-gray-200">
+                  <th className="py-3 px-2 text-left">Customer</th>
+                  <th className="py-3 text-left">Date</th>
+                  <th className="py-3 text-left">Amount</th>
+                  <th className="py-3 text-center">Status</th>
                 </tr>
               </thead>
-              <tbody className="border-y pb-4 border-gray-300">
-                <tr className="flex justify-between pt-4 items-center">
-                  <td className="flex gap-2 items-center">
-                    <span className="bg-green-400 text-[14px] p-1 w-7 rounded-4xl text-white">
-                      CB
-                    </span>
-                    <span className="text-[14px] text-gray-500">
-                    Clayton Bates
-                    </span>
+
+              <tbody className="divide-y divide-gray-200">
+                <tr>
+                  <td className="py-4">
+                    <div className="flex items-center gap-2 px-2">
+                      <span className="bg-green-400 text-[14px] w-7 h-7 flex items-center justify-center rounded-full text-white">
+                        CB
+                      </span>
+                      <span className="text-[14px] text-gray-500">
+                        Clayton Bates
+                      </span>
+                    </div>
                   </td>
                   <td className="text-[14px] text-gray-500">8 May 2020</td>
                   <td className="text-[14px] text-gray-500">$137.00</td>
-                  <td className="text-[12px] bg-[#E6FFFB] text-[#429C9C] border text-center p-1">
-                    Approved
+                  <td className="text-center">
+                    <span className="text-[12px] bg-[#E6FFFB] text-[#429C9C] border px-3 py-1 rounded">
+                      Approved
+                    </span>
                   </td>
                 </tr>
-              </tbody>
-              <tbody className="border-y pb-4 border-gray-300">
-                <tr className="flex justify-between pt-4 items-center">
-                  <td className="flex gap-2 items-center">
-                    <span className=" bg-orange-400 text-[14px] p-1 w-7 rounded-4xl text-white">
-                      GF
-                    </span>
-                    <span className="text-[14px] text-gray-500">
-                    Gabriel Frazier
-                    </span>
+                <tr>
+                  <td className="py-4">
+                    <div className="flex items-center gap-2 px-2">
+                      <span className="bg-orange-400 text-[14px] w-7 h-7 flex items-center justify-center rounded-full text-white">
+                        GF
+                      </span>
+                      <span className="text-[14px] text-gray-500">
+                        Gabriel Frazier
+                      </span>
+                    </div>
                   </td>
-                  <td className="text-[14px] text-gray-500">6 MAY 2020</td>
+                  <td className="text-[14px] text-gray-500">6 May 2020</td>
                   <td className="text-[14px] text-gray-500">$322.00</td>
-                  <td className="text-[12px] bg-[#E6FFFB] text-[#429C9C] border text-center p-1">
-                    Approved
+                  <td className="text-center">
+                    <span className="text-[12px] bg-[#E6FFFB] text-[#429C9C] border px-3 py-1 rounded">
+                      Approved
+                    </span>
                   </td>
                 </tr>
-              </tbody>
-              <tbody className="border-y pb-4 border-gray-300">
-                <tr className="flex justify-between pt-4 items-center">
-                  <td className="flex gap-2 items-center">
-                    <span className="bg-blue-400 text-[14px] p-1 w-7 rounded-4xl text-white">
-                      DH
-                    </span>
-                    <span className="text-[14px] text-gray-500">
-                    Debra Hamilton
-                    </span>
+                <tr>
+                  <td className="py-4">
+                    <div className="flex items-center gap-2 px-2">
+                      <span className="bg-[#33A0EB] text-[14px] w-7 h-7 flex items-center justify-center rounded-full text-white">
+                        DH
+                      </span>
+                      <span className="text-[14px] text-gray-500">
+                        Debra Hamilton
+                      </span>
+                    </div>
                   </td>
                   <td className="text-[14px] text-gray-500">1 May 2020</td>
-                  <td className="text-[14px] text-gray-500">$322.00</td>
-                  <td className="text-[12px] bg-[#E6F4FF] text-[#095BDE] border text-center p-1">
-                    Pending
+                  <td className="text-[14px] text-gray-500">$543.00</td>
+                  <td className="text-center">
+                    <span className="text-[12px] bg-[#E6F4FF] text-[#33A0EB] border px-3 py-1 rounded">
+                      Pending
+                    </span>
                   </td>
                 </tr>
-              </tbody>
-              <tbody className="border-y pb-4 border-gray-300">
-                <tr className="flex justify-between pt-4 items-center">
-                  <td className="flex gap-2 items-center">
-                    <span className="bg-yellow-400 text-[14px] p-1 w-7 rounded-4xl text-white">
-                      SW
-                    </span>
-                    <span className="text-[14px] text-gray-500">
-                    Stacey Ward
-                    </span>
+                <tr>
+                  <td className="py-4">
+                    <div className="flex items-center gap-2 px-2">
+                      <span className="bg-yellow-400 text-[14px] w-7 h-7 flex items-center justify-center rounded-full text-white">
+                        SW
+                      </span>
+                      <span className="text-[14px] text-gray-500">
+                        Stacey Ward
+                      </span>
+                    </div>
                   </td>
-                  <td className="text-[14px] text-gray-500">28 APRIL 2020</td>
+                  <td className="text-[14px] text-gray-500">28 April 2020</td>
                   <td className="text-[14px] text-gray-500">$876.00</td>
-                  <td className="text-[12px] bg-[#FFF2E8] text-[#E27C38] border text-center p-1">
-                    Rejected
+                  <td className="text-center">
+                    <span className="text-[12px] bg-[#FFF2E8] text-[#D4380D] border px-3 py-1 rounded">
+                      Rejected
+                    </span>
                   </td>
                 </tr>
-              </tbody>
-              <tbody className="border-y pb-4 border-gray-300">
-                <tr className="flex justify-between pt-4 items-center">
-                  <td className="flex gap-2 items-center">
-                    <span className="bg-pink-400 text-[14px] p-1 w-7 rounded-4xl text-white">
-                      TA
-                    </span>
-                    <span className="text-[14px] text-gray-500">
-                    Troy Alexander
-                    </span>
+                <tr>
+                  <td className="py-4">
+                    <div className="flex items-center gap-2 px-2">
+                      <span className="bg-red-400 text-[14px] w-7 h-7 flex items-center justify-center rounded-full text-white">
+                        TA
+                      </span>
+                      <span className="text-[14px] text-gray-500">
+                        Troy Alexander
+                      </span>
+                    </div>
                   </td>
-                  <td className="text-[14px] text-gray-500">28 APRIL 2020</td>
+                  <td className="text-[14px] text-gray-500">28 April 2020</td>
                   <td className="text-[14px] text-gray-500">$241.00</td>
-                  <td className="text-[12px] bg-[#E6FFFB] text-[#429C9C] border text-center p-1">
-                    Approved
+                  <td className="text-center">
+                    <span className="text-[12px] bg-[#E6FFFB] text-[#429C9C] border px-3 py-1 rounded">
+                      Approved
+                    </span>
                   </td>
                 </tr>
               </tbody>
@@ -401,7 +414,7 @@ export default function Hero() {
           </div>
         </div>
         <div>
-          <Footer/>
+          <Footer />
         </div>
       </main>
     </div>
