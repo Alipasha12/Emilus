@@ -26,7 +26,7 @@ import Link from "next/link";
 
 export default function Sidebar() {
   return (
-    <div className="pt-22">
+    <div className="pt-22 hidden lg:block">
       <aside className="w-65 h-full overflow-y-scroll bg-white border-2 border-gray-300 py-2">
         <div className="flex flex-col pl-10 h-full w-50 ">
           <span className="text-[11px] text-gray-400 pt-6 font-semibold">
