@@ -8,17 +8,20 @@ export default function Navbar() {
       <section className="flex px-8 justify-between pt-2">
         <div className="flex w-full h-16 gap-12">
         <Image
+        className="hidden lg:block"
           width={120}
           height={15}
           alt="logo is missing"
           src={"/logo.png"}
           />
           <div className="flex pt-4 gap-7">
-          <span className="pl-14 p-1"><Logs/></span>
-          <span className="relative">
+          <span className="lg:pl-14 p-1"><Logs/></span>
+          <div className="hidden lg:relative lg:block">
+          <span className="">
             <Search className="absolute text-gray-400 left-2 top-2" size={20} />
             <input type="text" className="border rounded-2xl border-gray-400 p-1 pl-8" placeholder="search . . ."/>
           </span>
+          </div>
           </div>
           </div>
       <div className="flex pt-4 gap-6">
