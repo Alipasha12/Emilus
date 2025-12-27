@@ -126,8 +126,8 @@ export default function Hero() {
       <main className="flex-1 h-full overflow-y-scroll p-6 pt-26 bg-gray-100">
         <div className="flex flex-row gap-4">
           <div className="w-screen">
-            <div className="flex ">
-              <div className="w-[75%]">
+            <div className="flex">
+              <div className="w-full lg:w-[75%]">
                 <div className="flex w-full flex-col *:lg:w-1/3 lg:flex-row gap-4 p-2 ">
                   <div className="flex flex-col p-3 rounded-xl bg-white">
                     <h1 className="flex text-[20px] text-gray-500 font-semibold pb-4">
@@ -175,7 +175,7 @@ export default function Hero() {
                     </p>
                   </div>
                 </div>
-                <div className="w-full h-[420px] bg-white rounded-2xl p-6 shadow">
+                <div className="w-full h-[530px] bg-white rounded-2xl p-6 shadow">
                   <div className="flex items-center justify-between mb-4">
                     <h2 className="text-lg font-semibold">Unique Visitors</h2>
                     <div className="flex gap-4 text-sm">
@@ -190,7 +190,7 @@ export default function Hero() {
                     </div>
                   </div>
 
-                  <ResponsiveContainer width="100%" height="100%">
+                  <ResponsiveContainer width="100%" height="100%" className="pb-10">
                     <LineChart
                       data={linedata}
                       margin={{ top: 10, right: 20, left: 0, bottom: 0 }}
@@ -199,7 +199,7 @@ export default function Hero() {
                       <XAxis dataKey="day" />
                       <YAxis />
                       <Tooltip />
-                      <Legend />
+                      {/* <Legend /> */}
 
                       <Line
                         type="monotone"
@@ -219,9 +219,10 @@ export default function Hero() {
                   </ResponsiveContainer>
                 </div>
               </div>
-              <div className="w-[22%]">
-                <div className="w-full hidden lg:block bg-gray-100 flex-col p-2 gap-4">
-                  <div className="flex flex-col p-4 bg-white rounded-xl items-center text-center gap-4">
+              <div className="w-[25%]  hidden lg:block">
+                <div className="w-full bg-gray-100 flex-col pl-4 ">
+                  <div className="flex flex-col p-4 mb-4 h-[356px] min-w-[150px] bg-white rounded-xl items-center text-center gap-4">
+                    <p className="font-bold">Monthly Target</p>
                     <CircularProgressbar
                       value={percentage}
                       className="px-6"
@@ -240,7 +241,7 @@ export default function Hero() {
                       Learn More
                     </button>
                   </div>
-                  <div>
+                  <div className="flex flex-col pl-3 pr-3 h-[316px] bg-white rounded-2xl">
                     <LineChart
                       className="bg-white px-7 hidden lg:block"
                       style={{
@@ -254,28 +255,77 @@ export default function Hero() {
                         top: 5,
                         right: 20,
                         left: 20,
-                        bottom: 5,
+                        bottom: 2,
                       }}
                     >
                       <Line type="monotone" dataKey="pv" />
                     </LineChart>
-                    <div className="flex flex-col p-3 rounded-xl bg-white">
-                      <div className="flex items-center gap-4 pb-3">
-                        <h1 className="flex text-[26px] font-bold">$17,329</h1>
-                        <span className="flex text-green-500">
-                          3.7
-                          <MoveUp size={10} className="mt-2" />
-                        </span>
-                      </div>
-                      <p className="text-slate-600">Active members</p>
+                    <div className="flex items-center gap-4 pb-3">
+                      <h1 className="flex text-[26px] font-bold">$17,329</h1>
+                      <span className="flex text-green-500">
+                        3.7
+                        <MoveUp size={10} className="mt-2" />
+                      </span>
                     </div>
+                    <p className="text-slate-600">Active members</p>
                   </div>
                 </div>
               </div>
             </div>
-
-            <div className="flex py-4 gap-6">
-              <div className="bg-white w-[30%] rounded-xl">
+            <div className="block lg:hidden">
+              <div className="w-full bg-gray-100 flex-col pt-4">
+                <div className="flex flex-col pt-4 mb-4 bg-white rounded-xl items-center text-center gap-4">
+                  <p className="font-bold">Monthly Target</p>
+                  <CircularProgressbar
+                    value={percentage}
+                    className="px-6 w-100 h-50"
+                    styles={{
+                      path: {
+                        stroke: "blue",
+                      },
+                      text: {
+                        fill: "#000",
+                      },
+                    }}
+                    text={`${percentage}%`}
+                  />
+                  <h1>You need abit more effects to hit monthly target</h1>
+                  <button className="bg-blue-600 text-white p-2 rounded-xl">
+                    Learn More
+                  </button>
+                </div>
+                <div className="flex flex-col p-3 bg-white rounded-2xl pb-6">
+                  <LineChart
+                    className="bg-white h-50 px-7"
+                    style={{
+                      width: "8",
+                      height: "8",
+                      stroke: "green",
+                    }}
+                    responsive
+                    data={data}
+                    margin={{
+                      top: 5,
+                      right: 20,
+                      left: 20,
+                      bottom: 5,
+                    }}
+                  >
+                    <Line type="monotone" dataKey="pv" />
+                  </LineChart>
+                  <div className="flex items-center gap-4 pb-3">
+                    <h1 className="flex text-[26px] font-bold">$17,329</h1>
+                    <span className="flex text-green-500">
+                      3.7
+                      <MoveUp size={10} className="mt-2" />
+                    </span>
+                  </div>
+                  <p className="text-slate-600">Active members</p>
+                </div>
+              </div>
+            </div>
+            <div className="flex flex-col lg:flex-row py-4 gap-6 ">
+              <div className="bg-white w-full lg:w-[30%] rounded-xl">
                 <div>
                   <div className="flex items-center justify-between px-8 py-4">
                     <h1 className="text-[20px] font-bold">New Join Member </h1>
@@ -317,10 +367,10 @@ export default function Hero() {
                   </div>
                 </div>
               </div>
-              <div className="bg-white w-[68%] rounded-xl">
+              <div className="bg-white w-full lg:w-[68%] rounded-xl">
                 <div className="flex justify-between p-6">
                   <h1 className="text-[20px] font-bold ">
-                    Latest Transactions{" "}
+                    Latest Transactionsx
                   </h1>
                   <Ellipsis />
                 </div>

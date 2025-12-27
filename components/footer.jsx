@@ -1,6 +1,6 @@
 export default function Footer() {
   return (
-    <div className="flex justify-between bg-white p-3 mt-4 rounded-xl">
+    <div className="flex w-full justify-between bg-white p-3 mt-4 rounded-xl">
       <h1>
         Copyright ©2025 <a>Emilus</a> All rights reserved.
       </h1>
