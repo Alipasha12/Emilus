@@ -15,10 +15,12 @@ import {
   YAxis,
 } from "recharts";
 import { PieChart, Pie, Cell, Legend, ResponsiveContainer } from "recharts";
+import { Provider } from "react-redux";
+import store from "../redux/store";
 const data = [
   { name: "Desktops", value: 3561 },
   { name: "Tablets", value: 1443 },
-  { name: "Mobiles", value: 2462 }
+  { name: "Mobiles", value: 2462 },
 ];
 
 const COLORS = ["#3b82f6", "#22c55e", "#facc15", "#f97316"];
@@ -195,27 +197,8 @@ export default function Analytic() {
     },
   ];
   useEffect(() => {
-    // Prevent loading script multiple times
-    if (!window.googleChartsLoaded) {
-      window.googleChartsLoaded = true;
+    let chart;
 
-      const script = document.createElement("script");
-      script.src = "https://www.gstatic.com/charts/loader.js";
-      script.onload = initCharts;
-      document.body.appendChild(script);
-    } else {
-      initCharts();
-    }
-
-    function initCharts() {
-      window.google.charts.load("current", {
-        packages: ["corechart", "geochart"],
-      });
-
-      window.google.charts.setOnLoadCallback(() => {
-        drawRegionsMap();
-      });
-    }
     function drawRegionsMap() {
       const data = window.google.visualization.arrayToDataTable([
         ["Country", "percentage"],
@@ -235,450 +218,479 @@ export default function Analytic() {
         },
       };
 
-      new window.google.visualization.GeoChart(
+      chart = new window.google.visualization.GeoChart(
         document.getElementById("regions_div")
-      ).draw(data, options);
+      );
+
+      chart.draw(data, options);
     }
+
+    function initCharts() {
+      window.google.charts.load("current", {
+        packages: ["corechart", "geochart"],
+      });
+
+      window.google.charts.setOnLoadCallback(drawRegionsMap);
+    }
+
+    if (!window.googleChartsLoaded) {
+      window.googleChartsLoaded = true;
+      const script = document.createElement("script");
+      script.src = "https://www.gstatic.com/charts/loader.js";
+      script.onload = initCharts;
+      document.body.appendChild(script);
+    } else {
+      initCharts();
+    }
+
+    // 🔥 Redraw on resize
+    window.addEventListener("resize", drawRegionsMap);
+
+    return () => {
+      window.removeEventListener("resize", drawRegionsMap);
+    };
   }, []);
-
   return (
-    <div className="flex h-screen overflow-hidden">
-      {/* Navbar */}
-      <Navbar />
+    <div className="flex h-screen overflow-y-scroll">
+      <Provider store={store}>
+        {/* Navbar */}
+        <Navbar />
 
-      {/* Sidebar */}
-      <Sidebar />
+        {/* Sidebar */}
+        <Sidebar />
 
-      {/* Main Page */}
-      <main className="flex flex-col w-full overflow-y-scroll p-6 pt-26 bg-gray-100">
-        <div className="flex flex-row">
-          <div
-            className="bg-white border-y border-l border-gray-200 w-[30%] rounded-l-2xl px-8 py-4"
-            style={{ height: "450px" }}
-          >
-            <h1 className="text-[20px] font-bold">Entrance by region</h1>
-            <div className="py-6 h-22">
-              <p className="flex h-6 text-[26px] items-center gap-1 font-medium">
-                <Image width={20} height={10} alt="us logo" src={"/us.png"} />
-                37.61%
-              </p>
-              <p className="text-slate-400 pt-2">Top entrance region</p>
-            </div>
-            <ul className="flex flex-col gap-3  *:flex pt-4 *:justify-between">
-              <li className="text-gray-400">
-                United States of America
-                <span className="text-black">37.61%</span>
-              </li>
-              <li className="text-gray-400">
-                Brazil <span className="text-black">16.79%</span>
-              </li>
-              <li className="text-gray-400">
-                India <span className="text-black">12.42%</span>
-              </li>
-              <li className="text-gray-400">
-                China <span className="text-black">9.85%</span>
-              </li>
-              <li className="text-gray-400">
-                Malaysia <span className="text-black">7.68%</span>
-              </li>
-              <li className="text-gray-400">
-                Thailand <span className="text-black">5.11%</span>
-              </li>
-            </ul>
-          </div>
-          <div
-            className="w-[70%] h-[450px] border-2 border-gray-200"
-            id="regions_div"
-            style={{ height: "450px" }}
-          ></div>
-        </div>
-        <div className="mt-6 rounded-2xl bg-white">
-          <ResponsiveContainer className="mb-10" width="100%" height={390}>
-            <PieChart>
-              <Pie
-                data={data}
-                innerRadius={100}
-                outerRadius={110}
-                paddingAngle={2}
-                dataKey="value"
-              >
-                {data.map((_, index) => (
-                  <Cell key={index} fill={COLORS[index]} />
-                ))}
-              </Pie>
-
-              {/* Center Text */}
-              <text
-                x="50%"
-                y="38%"
-                textAnchor="middle"
-                dominantBaseline="middle"
-                style={{ fontSize: 18, fontWeight: "600", fill: "#0f172a" }}
-              >
-                Sessions Device
-              </text>
-              <text
-                x="50%"
-                y="45%"
-                textAnchor="middle"
-                dominantBaseline="middle"
-                style={{ fontSize: 16, fill: "#0f172a" }}
-              >
-                {total}
-              </text>
-
-              <Legend
-                verticalAlign="bottom"
-                iconType="circle"
-                iconSize={6}
-                layout="vertical"
-                formatter={(value, entry) => (
-                  <span style={{ color: "black" }}>
-                    {value}
-                    <span
-                      style={{
-                        marginLeft: 12,
-                        fontWeight: 600,
-                        justifyContent: "space-between",
-                        width: 180,
-                        color: "black",
-                      }}
-                    >
-                      {entry?.payload?.value}
-                    </span>
-                  </span>
-                )}
-              />
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
-        <div className=" flex gap-6 pt-8">
-          <div className="pt-6 px-8 w-[50%] rounded-2xl bg-white">
-            <h1 className="text-[18px] font-bold">Most visited pages</h1>
-            <ul>
-              <div className="flex py-2 border-b border-gray-400 items-center justify-between pt-8">
-                <div>
-                  <li className="text-[16px] font-bold">Home</li>
-                  <p className="text-gray-500 text-[14px]">/app/home</p>
-                </div>
-                <button className="flex items-center font-bold border-blue-500 rounded text-[12px] text-blue-700 h-6 p-1 gap-1 border">
-                  7,616
-                </button>
-              </div>
-              <div className="flex py-2 border-b border-gray-400 items-center justify-between pt-4">
-                <div>
-                  <li className="text-[16px] font-bold">Resources</li>
-                  <p className="text-gray-500 text-[14px]">/app/resource</p>
-                </div>
-                <button className="flex items-center font-bold border-blue-500 rounded text-[12px] text-blue-700 h-6 p-1 gap-1 border">
-                  6,923
-                </button>
-              </div>
-              <div className="flex py-2 border-b border-gray-400 items-center justify-between pt-4">
-                <div>
-                  <li className="text-[16px] font-bold">Integrations</li>
-                  <p className="text-gray-500 text-[14px]">
-                    /integrations/paypal
-                  </p>
-                </div>
-                <button className="flex items-center font-bold border-blue-500 rounded text-[12px] text-blue-700 h-6 p-1 gap-1 border">
-                  5,228
-                </button>
-              </div>
-              <div className="flex py-2 border-b border-gray-400 items-center justify-between pt-4">
-                <div>
-                  <li className="text-[16px] font-bold">Partners</li>
-                  <p className="text-gray-500 text-[14px]">
-                    partners/our-partners
-                  </p>
-                </div>
-                <button className="flex items-center font-bold border-blue-500 rounded text-[12px] text-blue-700 h-6 p-1 gap-1 border">
-                  3,512
-                </button>
-              </div>
-              <div className="flex py-2 items-center justify-between pt-4 pb-8">
-                <div>
-                  <li className="text-[16px] font-bold">Developers</li>
-                  <p className="text-gray-500 text-[14px]">developers/docs/</p>
-                </div>
-                <button className="flex items-center font-bold border-blue-500 rounded text-[12px] text-blue-700 h-6 p-1 gap-1 border">
-                  1,707
-                </button>
-              </div>
-            </ul>
-          </div>
-          <div className="pt-6 px-8 w-[50%] rounded-2xl bg-white">
-            <h1 className="text-[18px] font-bold">Social media referrals</h1>
-            <ul>
-              <div className="flex py-2 border-b border-gray-400 items-center justify-between pt-8">
-                <div className="flex items-center gap-4">
-                  <span>
-                    <Image
-                      width={30}
-                      height={30}
-                      alt="us logo"
-                      src={"/facebook.svg"}
-                    />
-                  </span>
-                  <div>
-                    <li className="text-[16px] font-bold">Facebook</li>
-                    <p className="text-gray-400 text-[14px]">Total: 322</p>
-                  </div>
-                </div>
-                <div className="flex items-center w-[30%]">
-                  <LineChart
-                    style={{
-                      width: "50%",
-                      aspectRatio: 1.6,
-                      maxWidth: 70,
-                      margin: "auto",
-                    }}
-                    data={facebook}
-                  >
-                    <XAxis hide />
-                    <YAxis hide />
-
-                    <Line
-                      type="monotone"
-                      dataKey="fb"
-                      stroke="green"
-                      dot={false}
-                      activeDot={{ r: 5 }}
-                    />
-
-                    <Tooltip
-                      formatter={(value) => [value]} // show no "sd"
-                      labelFormatter={() => ""} // hide label
-                    />
-                  </LineChart>
-
-                  <button className="flex items-center font-bold text-[14px] h-6 p-1 gap-1">
-                    30.1%
-                    <MoveUp className="text-green-500" size={12} />
-                  </button>
-                </div>
-              </div>
-              <div className="flex py-3 border-b border-gray-400 items-center justify-between  ">
-                <div className="flex items-center gap-4">
-                  <span>
-                    <Image
-                      width={30}
-                      height={30}
-                      alt="us logo"
-                      src={"/twitter.svg"}
-                    />
-                  </span>
-                  <div>
-                    <li className="text-[16px] font-bold">Twitter</li>
-                    <p className="text-gray-400 text-[14px]">Total: 217</p>
-                  </div>
-                </div>
-                <div className="flex items-center w-[30%]">
-                  <LineChart
-                    style={{
-                      width: "50%",
-                      aspectRatio: 1.6,
-                      maxWidth: 70,
-                      margin: "auto",
-                    }}
-                    data={visitor}
-                  >
-                    <XAxis hide />
-                    <YAxis hide />
-
-                    <Line
-                      type="monotone"
-                      dataKey="sd"
-                      stroke="green"
-                      dot={false}
-                      activeDot={{ r: 5 }}
-                    />
-
-                    <Tooltip
-                      formatter={(value) => [value]} // show no "sd"
-                      labelFormatter={() => ""} // hide label
-                    />
-                  </LineChart>
-                  <button className="flex items-center font-bold text-[14px] h-6 p-1 gap-1">
-                    21.6%
-                    <MoveUp className="text-green-500" size={12} />
-                  </button>
-                </div>
-              </div>
-              <div className="flex py-3 border-b border-gray-400 items-center justify-between  ">
-                <div className="flex items-center gap-4">
-                  <span>
-                    <Image
-                      width={30}
-                      height={30}
-                      alt="us logo"
-                      src={"/youtube.svg"}
-                    />
-                  </span>
-                  <div>
-                    <li className="text-[16px] font-bold">Youtube</li>
-                    <p className="text-gray-400 text-[14px]">Total: 188</p>
-                  </div>
-                </div>
-                <div className="flex items-center w-[30%]">
-                  <LineChart
-                    style={{
-                      width: "50%",
-                      aspectRatio: 1.6,
-                      maxWidth: 70,
-                      margin: "auto",
-                    }}
-                    data={youtube}
-                  >
-                    <XAxis hide />
-                    <YAxis hide />
-
-                    <Line
-                      type="monotone"
-                      dataKey="yt"
-                      stroke="red"
-                      dot={false}
-                      activeDot={{ r: 5 }}
-                    />
-
-                    <Tooltip
-                      formatter={(value) => [value]} // show no "sd"
-                      labelFormatter={() => ""} // hide label
-                    />
-                  </LineChart>
-                  <button className="flex items-center font-bold text-[14px] h-6 p-1 gap-1">
-                    -7.1%
-                    <MoveDown className="text-red-500" size={12} />
-                  </button>
-                </div>
-              </div>
-              <div className="flex py-3 border-b border-gray-400 items-center justify-between  ">
-                <div className="flex items-center gap-4">
-                  <span>
-                    <Image
-                      width={30}
-                      height={30}
-                      alt="us logo"
-                      src={"/linkedin.svg"}
-                    />
-                  </span>
-                  <div>
-                    <li className="text-[16px] font-bold">Linkedin</li>
-                    <p className="text-gray-400 text-[14px]">Total: 207</p>
-                  </div>
-                </div>
-                <div className="flex items-center w-[30%]">
-                  <LineChart
-                    style={{
-                      width: "50%",
-                      aspectRatio: 1.6,
-                      maxWidth: 70,
-                      margin: "auto",
-                    }}
-                    data={linkedin}
-                  >
-                    <XAxis hide />
-                    <YAxis hide />
-
-                    <Line
-                      type="monotone"
-                      dataKey="ln"
-                      stroke="green"
-                      dot={false}
-                      activeDot={{ r: 5 }}
-                    />
-
-                    <Tooltip
-                      formatter={(value) => [value]} // show no "sd"
-                      labelFormatter={() => ""} // hide label
-                    />
-                  </LineChart>
-
-                  <button className="flex items-center font-bold text-[14px] h-6 p-1 gap-1">
-                    11.9%
-                    <MoveUp className="text-green-500" size={12} />
-                  </button>
-                </div>
-              </div>
-              <div className="flex py-3 border-b border-gray-400 items-center justify-between  ">
-                <div className="flex items-center gap-4">
-                  <span>
-                    <Image
-                      width={30}
-                      height={30}
-                      alt="us logo"
-                      src={"/dribble.svg"}
-                    />
-                  </span>
-                  <div>
-                    <li className="text-[16px] font-bold">Dribble</li>
-                    <p className="text-gray-400 text-[14px]">Total: 86</p>
-                  </div>
-                </div>
-                <div className="flex items-center w-[30%]">
-                  <LineChart
-                    style={{
-                      width: "50%",
-                      aspectRatio: 1.6,
-                      maxWidth: 70,
-                      margin: "auto",
-                    }}
-                    data={dribble}
-                  >
-                    <XAxis hide />
-                    <YAxis hide />
-
-                    <Line
-                      type="monotone"
-                      dataKey="db"
-                      stroke="red"
-                      dot={false}
-                      activeDot={{ r: 5 }}
-                    />
-
-                    <Tooltip
-                      formatter={(value) => [value]} // show no "sd"
-                      labelFormatter={() => ""} // hide label
-                    />
-                  </LineChart>
-
-                  <button className="flex items-center font-bold text-[14px] h-6 p-1 gap-1">
-                    -28.5%
-                    <MoveDown className="text-red-500" size={12} />
-                  </button>
-                </div>
-              </div>
-            </ul>
-          </div>
-        </div>
-        <div>
-          <div className="bg-white mt-6 rounded-2xl p-8">
-            <BarChart
-              className="p-2 w-[1150px] h-[300px]"
-              style={{
-                aspectRatio: 1.618,
-              }}
-              responsive
-              data={barchart}
-              margin={{
-                top: 5,
-                right: 5,
-                left: 0,
-              }}
-              barGap={5}
-              barCategoryGap={"80%"}
+        {/* Main Page */}
+        <main className="flex flex-col w-full overflow-y-scroll p-6 pt-26 bg-gray-100">
+          <div className="flex flex-col lg:flex-row ">
+            <div
+              className="bg-white border-y border-l border-gray-200 w-full rounded-l-2xl px-8 py-4"
+              style={{ height: "450px" }}
             >
-              <XAxis dataKey="name" />
-              <Tooltip />
-              <Bar dataKey="pv" fill="#3E82F7" barSize={20} />
-              <Bar dataKey="uv" fill="#04D182" barSize={20} />
-            </BarChart>
+              <h1 className="text-[20px] font-bold">Entrance by region</h1>
+              <div className="py-6 h-22">
+                <p className="flex h-6 text-[26px] items-center gap-1 font-medium">
+                  <Image width={20} height={10} alt="us logo" src={"/us.png"} />
+                  37.61%
+                </p>
+                <p className="text-slate-400 pt-2">Top entrance region</p>
+              </div>
+              <ul className="flex flex-col gap-3  *:flex pt-4 *:justify-between">
+                <li className="text-gray-400">
+                  United States of America
+                  <span className="text-black">37.61%</span>
+                </li>
+                <li className="text-gray-400">
+                  Brazil <span className="text-black">16.79%</span>
+                </li>
+                <li className="text-gray-400">
+                  India <span className="text-black">12.42%</span>
+                </li>
+                <li className="text-gray-400">
+                  China <span className="text-black">9.85%</span>
+                </li>
+                <li className="text-gray-400">
+                  Malaysia <span className="text-black">7.68%</span>
+                </li>
+                <li className="text-gray-400">
+                  Thailand <span className="text-black">5.11%</span>
+                </li>
+              </ul>
+            </div>
+            <div
+              id="regions_div"
+              className="w-full mx-auto h-[350px] lg:h-[450px] border-2 border-gray-200"
+            ></div>
           </div>
-        </div>
-        <div>
-          <Footer />
-        </div>
-      </main>
+          <div className="mt-6 rounded-2xl bg-white">
+            <ResponsiveContainer className="mb-10" width="100%" height={390}>
+              <PieChart>
+                <Pie
+                  data={data}
+                  innerRadius={100}
+                  outerRadius={110}
+                  paddingAngle={2}
+                  dataKey="value"
+                >
+                  {data.map((_, index) => (
+                    <Cell key={index} fill={COLORS[index]} />
+                  ))}
+                </Pie>
+
+                {/* Center Text */}
+                <text
+                  x="50%"
+                  y="38%"
+                  textAnchor="middle"
+                  dominantBaseline="middle"
+                  style={{ fontSize: 18, fontWeight: "600", fill: "#0f172a" }}
+                >
+                  Sessions Device
+                </text>
+                <text
+                  x="50%"
+                  y="45%"
+                  textAnchor="middle"
+                  dominantBaseline="middle"
+                  style={{ fontSize: 16, fill: "#0f172a" }}
+                >
+                  {total}
+                </text>
+
+                <Legend
+                  verticalAlign="bottom"
+                  iconType="circle"
+                  iconSize={6}
+                  layout="vertical"
+                  formatter={(value, entry) => (
+                    <span style={{ color: "black" }}>
+                      {value}
+                      <span
+                        style={{
+                          marginLeft: 12,
+                          fontWeight: 600,
+                          justifyContent: "space-between",
+                          width: 180,
+                          color: "black",
+                        }}
+                      >
+                        {entry?.payload?.value}
+                      </span>
+                    </span>
+                  )}
+                />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+          <div className=" flex gap-6 pt-8">
+            <div className="pt-6 px-8 w-[50%] rounded-2xl bg-white">
+              <h1 className="text-[18px] font-bold">Most visited pages</h1>
+              <ul>
+                <div className="flex py-2 border-b border-gray-400 items-center justify-between pt-8">
+                  <div>
+                    <li className="text-[16px] font-bold">Home</li>
+                    <p className="text-gray-500 text-[14px]">/app/home</p>
+                  </div>
+                  <button className="flex items-center font-bold border-blue-500 rounded text-[12px] text-blue-700 h-6 p-1 gap-1 border">
+                    7,616
+                  </button>
+                </div>
+                <div className="flex py-2 border-b border-gray-400 items-center justify-between pt-4">
+                  <div>
+                    <li className="text-[16px] font-bold">Resources</li>
+                    <p className="text-gray-500 text-[14px]">/app/resource</p>
+                  </div>
+                  <button className="flex items-center font-bold border-blue-500 rounded text-[12px] text-blue-700 h-6 p-1 gap-1 border">
+                    6,923
+                  </button>
+                </div>
+                <div className="flex py-2 border-b border-gray-400 items-center justify-between pt-4">
+                  <div>
+                    <li className="text-[16px] font-bold">Integrations</li>
+                    <p className="text-gray-500 text-[14px]">
+                      /integrations/paypal
+                    </p>
+                  </div>
+                  <button className="flex items-center font-bold border-blue-500 rounded text-[12px] text-blue-700 h-6 p-1 gap-1 border">
+                    5,228
+                  </button>
+                </div>
+                <div className="flex py-2 border-b border-gray-400 items-center justify-between pt-4">
+                  <div>
+                    <li className="text-[16px] font-bold">Partners</li>
+                    <p className="text-gray-500 text-[14px]">
+                      partners/our-partners
+                    </p>
+                  </div>
+                  <button className="flex items-center font-bold border-blue-500 rounded text-[12px] text-blue-700 h-6 p-1 gap-1 border">
+                    3,512
+                  </button>
+                </div>
+                <div className="flex py-2 items-center justify-between pt-4 pb-8">
+                  <div>
+                    <li className="text-[16px] font-bold">Developers</li>
+                    <p className="text-gray-500 text-[14px]">
+                      developers/docs/
+                    </p>
+                  </div>
+                  <button className="flex items-center font-bold border-blue-500 rounded text-[12px] text-blue-700 h-6 p-1 gap-1 border">
+                    1,707
+                  </button>
+                </div>
+              </ul>
+            </div>
+            <div className="pt-6 px-8 w-[50%] rounded-2xl bg-white">
+              <h1 className="text-[18px] font-bold">Social media referrals</h1>
+              <ul>
+                <div className="flex py-2 border-b border-gray-400 items-center justify-between pt-8">
+                  <div className="flex items-center gap-4">
+                    <span>
+                      <Image
+                        width={30}
+                        height={30}
+                        alt="us logo"
+                        src={"/facebook.svg"}
+                      />
+                    </span>
+                    <div>
+                      <li className="text-[16px] font-bold">Facebook</li>
+                      <p className="text-gray-400 text-[14px]">Total: 322</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center w-[30%]">
+                    <LineChart
+                      style={{
+                        width: "50%",
+                        aspectRatio: 1.6,
+                        maxWidth: 70,
+                        margin: "auto",
+                      }}
+                      data={facebook}
+                    >
+                      <XAxis hide />
+                      <YAxis hide />
+
+                      <Line
+                        type="monotone"
+                        dataKey="fb"
+                        stroke="green"
+                        dot={false}
+                        activeDot={{ r: 5 }}
+                      />
+
+                      <Tooltip
+                        formatter={(value) => [value]} // show no "sd"
+                        labelFormatter={() => ""} // hide label
+                      />
+                    </LineChart>
+
+                    <button className="flex items-center font-bold text-[14px] h-6 p-1 gap-1">
+                      30.1%
+                      <MoveUp className="text-green-500" size={12} />
+                    </button>
+                  </div>
+                </div>
+                <div className="flex py-3 border-b border-gray-400 items-center justify-between  ">
+                  <div className="flex items-center gap-4">
+                    <span>
+                      <Image
+                        width={30}
+                        height={30}
+                        alt="us logo"
+                        src={"/twitter.svg"}
+                      />
+                    </span>
+                    <div>
+                      <li className="text-[16px] font-bold">Twitter</li>
+                      <p className="text-gray-400 text-[14px]">Total: 217</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center w-[30%]">
+                    <LineChart
+                      style={{
+                        width: "50%",
+                        aspectRatio: 1.6,
+                        maxWidth: 70,
+                        margin: "auto",
+                      }}
+                      data={visitor}
+                    >
+                      <XAxis hide />
+                      <YAxis hide />
+
+                      <Line
+                        type="monotone"
+                        dataKey="sd"
+                        stroke="green"
+                        dot={false}
+                        activeDot={{ r: 5 }}
+                      />
+
+                      <Tooltip
+                        formatter={(value) => [value]} // show no "sd"
+                        labelFormatter={() => ""} // hide label
+                      />
+                    </LineChart>
+                    <button className="flex items-center font-bold text-[14px] h-6 p-1 gap-1">
+                      21.6%
+                      <MoveUp className="text-green-500" size={12} />
+                    </button>
+                  </div>
+                </div>
+                <div className="flex py-3 border-b border-gray-400 items-center justify-between  ">
+                  <div className="flex items-center gap-4">
+                    <span>
+                      <Image
+                        width={30}
+                        height={30}
+                        alt="us logo"
+                        src={"/youtube.svg"}
+                      />
+                    </span>
+                    <div>
+                      <li className="text-[16px] font-bold">Youtube</li>
+                      <p className="text-gray-400 text-[14px]">Total: 188</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center w-[30%]">
+                    <LineChart
+                      style={{
+                        width: "50%",
+                        aspectRatio: 1.6,
+                        maxWidth: 70,
+                        margin: "auto",
+                      }}
+                      data={youtube}
+                    >
+                      <XAxis hide />
+                      <YAxis hide />
+
+                      <Line
+                        type="monotone"
+                        dataKey="yt"
+                        stroke="red"
+                        dot={false}
+                        activeDot={{ r: 5 }}
+                      />
+
+                      <Tooltip
+                        formatter={(value) => [value]} // show no "sd"
+                        labelFormatter={() => ""} // hide label
+                      />
+                    </LineChart>
+                    <button className="flex items-center font-bold text-[14px] h-6 p-1 gap-1">
+                      -7.1%
+                      <MoveDown className="text-red-500" size={12} />
+                    </button>
+                  </div>
+                </div>
+                <div className="flex py-3 border-b border-gray-400 items-center justify-between  ">
+                  <div className="flex items-center gap-4">
+                    <span>
+                      <Image
+                        width={30}
+                        height={30}
+                        alt="us logo"
+                        src={"/linkedin.svg"}
+                      />
+                    </span>
+                    <div>
+                      <li className="text-[16px] font-bold">Linkedin</li>
+                      <p className="text-gray-400 text-[14px]">Total: 207</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center w-[30%]">
+                    <LineChart
+                      style={{
+                        width: "50%",
+                        aspectRatio: 1.6,
+                        maxWidth: 70,
+                        margin: "auto",
+                      }}
+                      data={linkedin}
+                    >
+                      <XAxis hide />
+                      <YAxis hide />
+
+                      <Line
+                        type="monotone"
+                        dataKey="ln"
+                        stroke="green"
+                        dot={false}
+                        activeDot={{ r: 5 }}
+                      />
+
+                      <Tooltip
+                        formatter={(value) => [value]} // show no "sd"
+                        labelFormatter={() => ""} // hide label
+                      />
+                    </LineChart>
+
+                    <button className="flex items-center font-bold text-[14px] h-6 p-1 gap-1">
+                      11.9%
+                      <MoveUp className="text-green-500" size={12} />
+                    </button>
+                  </div>
+                </div>
+                <div className="flex py-3 border-b border-gray-400 items-center justify-between  ">
+                  <div className="flex items-center gap-4">
+                    <span>
+                      <Image
+                        width={30}
+                        height={30}
+                        alt="us logo"
+                        src={"/dribble.svg"}
+                      />
+                    </span>
+                    <div>
+                      <li className="text-[16px] font-bold">Dribble</li>
+                      <p className="text-gray-400 text-[14px]">Total: 86</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center w-[30%]">
+                    <LineChart
+                      style={{
+                        width: "50%",
+                        aspectRatio: 1.6,
+                        maxWidth: 70,
+                        margin: "auto",
+                      }}
+                      data={dribble}
+                    >
+                      <XAxis hide />
+                      <YAxis hide />
+
+                      <Line
+                        type="monotone"
+                        dataKey="db"
+                        stroke="red"
+                        dot={false}
+                        activeDot={{ r: 5 }}
+                      />
+
+                      <Tooltip
+                        formatter={(value) => [value]} // show no "sd"
+                        labelFormatter={() => ""} // hide label
+                      />
+                    </LineChart>
+
+                    <button className="flex items-center font-bold text-[14px] h-6 p-1 gap-1">
+                      -28.5%
+                      <MoveDown className="text-red-500" size={12} />
+                    </button>
+                  </div>
+                </div>
+              </ul>
+            </div>
+          </div>
+          <div>
+            <div className="bg-white flex mt-6 rounded-2xl p-8">
+              <BarChart
+                className="p-2 w-[1150px] h-[300px]"
+                style={{
+                  aspectRatio: 1.618,
+                }}
+                responsive
+                data={barchart}
+                margin={{
+                  top: 5,
+                  right: 5,
+                  left: 0,
+                }}
+                barGap={5}
+                barCategoryGap={"80%"}
+              >
+                <XAxis dataKey="name" />
+                <Tooltip />
+                <Bar dataKey="pv" fill="#3E82F7" barSize={20} />
+                <Bar dataKey="uv" fill="#04D182" barSize={20} />
+              </BarChart>
+            </div>
+          </div>
+          <div>
+            <Footer />
+          </div>
+        </main>
+      </Provider>
     </div>
   );
 }

@@ -4,6 +4,7 @@ import Navbar from "@/components/navbar";
 import Sidebar from "@/components/sidebar";
 import { MoveDown, MoveUp, MoveUpIcon } from "lucide-react";
 import Image from "next/image";
+import { Provider } from "react-redux";
 import {
   PieChart,
   Pie,
@@ -17,6 +18,7 @@ import {
   CartesianGrid,
   Tooltip,
 } from "recharts";
+import store from "../redux/store";
 
 const data2 = [
   { date: "08 Jul", value: 45 },
@@ -41,11 +43,12 @@ export default function Sales() {
 
   return (
     <div className="flex h-screen overflow-hidden">
+      <Provider store={store}>
       <Navbar />
       <Sidebar />
       <main className="flex-1 h-full overflow-y-scroll p-6 pt-28 bg-gray-100">
-        <div className="flex gap-4">
-          <div className="w-[65%] rounded-2xl p-4 bg-white">
+        <div className="flex flex-col lg:flex-row gap-4">
+          <div className="w-full lg:w-[65%] rounded-2xl p-4 bg-white">
             <div className="flex justify-between items-center">
               <div className="flex flex-col">
                 <h1 className="text-[18px] font-medium">Weekly Revenue</h1>
@@ -56,7 +59,7 @@ export default function Sales() {
               </button>
             </div>
             <div className="flex ">
-              <div className="pt-35 py-10 w-20%">
+              <div className="pt-4 lg:pt-35 py-10 w-20%">
                 <h1 className="text-[30px] font-bold">$27,188.00</h1>
                 <p className="flex text-green-300 py-4 text-[14px]">
                   <MoveUp size={16} className="pt-1" />
@@ -67,7 +70,7 @@ export default function Sales() {
                   above
                 </p>
               </div>
-              <div className="w-full bg-white pt-18 rounded-2xl h-[300px]">
+              <div className="w-full hidden lg:block bg-white pt-18 rounded-2xl h-[300px]">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={data2}>
                     <CartesianGrid
@@ -92,10 +95,32 @@ export default function Sales() {
                 </ResponsiveContainer>
               </div>
             </div>
-            <div className="w-[30%]"></div>
-            <div className="w-[70%]"></div>
+            <div className="w-full block lg:hidden bg-white pt-18 rounded-2xl h-[300px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={data2}>
+                    <CartesianGrid
+                      strokeDasharray="1"
+                      vertical={false}
+                      stroke="#e5e7eb"
+                    />
+
+                    <XAxis dataKey="date" axisLine={false} tickLine={false} />
+
+                    <YAxis axisLine={false} tickLine={false} />
+
+                    <Tooltip />
+
+                    <Bar
+                      dataKey="value"
+                      fill="#3b82f6"
+                      radius={[6, 6, 0, 0]}
+                      barSize={10}
+                    />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
           </div>
-          <div className="grid grid-cols-2 w-[35%] rounded-2xl gap-4">
+          <div className="grid lg:grid-cols-2 w-full lg:w-[35%] rounded-2xl gap-4">
             <div className="bg-white py-4 p-2 flex flex-col items-center *:first:py-4  rounded-2xl text-center *:p-1">
               <Image
                 width={50}
@@ -139,8 +164,8 @@ export default function Sales() {
             </div>
           </div>
         </div>
-        <div className=" flex gap-6 pt-8">
-          <div className="pt-6 px-8 w-[50%] rounded-2xl bg-white">
+        <div className=" flex flex-col lg:flex-row gap-6 pt-8">
+          <div className="pt-6 px-8 w-full h-[480px] lg:w-[50%] rounded-2xl bg-white">
             <h1 className="text-[18px] font-bold">Top Product</h1>
             <ul>
               <div className="flex py-2 items-center justify-between pt-8">
@@ -257,7 +282,7 @@ export default function Sales() {
               </div>
             </ul>
           </div>
-          <div className="pt-6 px-8 w-[50%] rounded-2xl bg-white">
+          <div className="pt-6 px-8 w-full h-[480px] lg:w-[50%] rounded-2xl bg-white">
             <ResponsiveContainer className="pb-6">
               <PieChart>
                 <Pie
@@ -479,6 +504,7 @@ export default function Sales() {
           <Footer />
         </div>
       </main>
+      </Provider>
     </div>
   );
 }

@@ -1,3 +1,4 @@
+"use client";
 import {
   Ban,
   Calendar,
@@ -23,12 +24,19 @@ import {
   StickyNote,
 } from "lucide-react";
 import Link from "next/link";
+import { useSelector } from "react-redux";
 
 export default function Sidebar() {
+  const isSideNavVisible = useSelector((state) => state.menu.isHidden);
+
   return (
-    <div className="pt-22 hidden lg:block">
-      <aside className="w-65 h-full overflow-y-scroll bg-white border-2 border-gray-300 py-2">
-        <div className="flex flex-col pl-10 h-full w-50 ">
+    <div className="pt-[90px] bg-white">
+      <aside
+        className={` ${
+          isSideNavVisible ? "hidden" : "block"
+        } h-full pr-15 max-md:fixed overflow-y-scroll z-10 bg-white border-2 border-gray-300 py-2`}
+      >
+        <div className="flex flex-col bg-white pl-10 h-full w-50 ">
           <span className="text-[11px] text-gray-400 pt-6 font-semibold">
             DASHBOARD
           </span>

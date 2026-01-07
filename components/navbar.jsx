@@ -1,7 +1,13 @@
+'use client'
+import { SidebarToggle } from "@/app/redux/menu/menuSlice";
 import { Bell, Globe, Logs,Search, Settings } from "lucide-react";
 import Image from "next/image";
+import { useDispatch } from 'react-redux'
 
 export default function Navbar() {
+
+
+  const dispatch = useDispatch()
 
   return (
     <div className="fixed bg-white border-2 border-gray-300 z-1 w-full pb-4">
@@ -15,7 +21,7 @@ export default function Navbar() {
           src={"/logo.png"}
           />
           <div className="flex pt-4 gap-7">
-          <span className="lg:pl-14 p-1"><Logs/></span>
+          <span className="lg:pl-14 p-1" onClick={()=> {dispatch(SidebarToggle()); }}><Logs/></span>
           <div className="hidden lg:relative lg:block">
           <span className="">
             <Search className="absolute text-gray-400 left-2 top-2" size={20} />

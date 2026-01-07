@@ -116,7 +116,7 @@ export default function Hero() {
   ];
 
   return (
-    <div className="flex h-screen overflow-hidden">
+    <div className="fixed h-screen z-0">
       <Navbar />
 
       {/* Sidebar */}
