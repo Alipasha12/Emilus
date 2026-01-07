@@ -14,7 +14,7 @@ export default function Navbar() {
       <section className="flex px-8 justify-between pt-2">
         <div className="flex w-full h-16 gap-12">
         <Image
-        className="hidden lg:block"
+        className="hidden lg:block  w-[120px] h-auto"
           width={120}
           height={15}
           alt="logo is missing"
